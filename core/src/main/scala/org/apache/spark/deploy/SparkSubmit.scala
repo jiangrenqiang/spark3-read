@@ -81,11 +81,12 @@ private[spark] class SparkSubmit extends Logging {
     // Initialize logging if it hasn't been done yet. Keep track of whether logging needs to
     // be reset before the application starts.
     val uninitLog = initializeLogIfNecessary(true, silent = true)
-
+    // 解析参数
     val appArgs = parseArguments(args)
     if (appArgs.verbose) {
       logInfo(appArgs.toString)
     }
+    // 匹配是哪个
     appArgs.action match {
       case SparkSubmitAction.SUBMIT => submit(appArgs, uninitLog)
       case SparkSubmitAction.KILL => kill(appArgs)
@@ -132,7 +133,8 @@ private[spark] class SparkSubmit extends Logging {
 
   /** Print version information to the log. */
   private def printVersion(): Unit = {
-    logInfo("""Welcome to
+    logInfo(
+      """Welcome to
       ____              __
      / __/__  ___ _____/ /__
     _\ \/ _ \/ _ `/ __/  '_/
@@ -156,7 +158,7 @@ private[spark] class SparkSubmit extends Logging {
   private def submit(args: SparkSubmitArguments, uninitLog: Boolean): Unit = {
 
     def doRunMain(): Unit = {
-      if (args.proxyUser != null) {
+      if (args.proxyUser != null) { // 代理用户,也就是我们spark提交的服务器用户
         val proxyUser = UserGroupInformation.createProxyUser(args.proxyUser,
           UserGroupInformation.getCurrentUser())
         try {
@@ -198,7 +200,7 @@ private[spark] class SparkSubmit extends Logging {
           args.useRest = false
           submit(args, false)
       }
-    // In all other modes, just run the main class as prepared
+      // In all other modes, just run the main class as prepared
     } else {
       doRunMain()
     }
@@ -210,25 +212,26 @@ private[spark] class SparkSubmit extends Logging {
    * @param args the parsed SparkSubmitArguments used for environment preparation.
    * @param conf the Hadoop Configuration, this argument will only be set in unit test.
    * @return a 4-tuple:
-   *        (1) the arguments for the child process,
-   *        (2) a list of classpath entries for the child,
-   *        (3) a map of system properties, and
-   *        (4) the main class for the child
+   *         (1) the arguments for the child process,
+   *         (2) a list of classpath entries for the child,
+   *         (3) a map of system properties, and
+   *         (4) the main class for the child
    *
-   * Exposed for testing.
+   *         Exposed for testing.
    */
   private[deploy] def prepareSubmitEnvironment(
-      args: SparkSubmitArguments,
-      conf: Option[HadoopConfiguration] = None)
-      : (Seq[String], Seq[String], SparkConf, String) = {
+                                                args: SparkSubmitArguments,
+                                                conf: Option[HadoopConfiguration] = None)
+  : (Seq[String], Seq[String], SparkConf, String) = {
     // Return values
     val childArgs = new ArrayBuffer[String]()
     val childClasspath = new ArrayBuffer[String]()
     val sparkConf = args.toSparkConf()
     var childMainClass = ""
 
-    // Set the cluster manager
+    // Set the cluster manager 设置集群管理器
     val clusterManager: Int = args.master match {
+      // 只支持下面几种不部署模式
       case "yarn" => YARN
       case m if m.startsWith("spark") => STANDALONE
       case m if m.startsWith("mesos") => MESOS
@@ -241,6 +244,7 @@ private[spark] class SparkSubmit extends Logging {
 
     // Set the deploy mode; default is client mode
     var deployMode: Int = args.deployMode match {
+      // 默认是client
       case "client" | null => CLIENT
       case "cluster" => CLUSTER
       case _ =>
@@ -248,12 +252,14 @@ private[spark] class SparkSubmit extends Logging {
         -1
     }
 
+    // 判断是哪种部署模式
     if (clusterManager == YARN) {
       // Make sure YARN is included in our build if we're trying to use it
+      // 保证我们的org.apache.spark.deploy.yarn.YarnClusterApplication在包中,以及不是测试
       if (!Utils.classIsLoadable(YARN_CLUSTER_SUBMIT_CLASS) && !Utils.isTesting) {
         error(
           "Could not load YARN classes. " +
-          "This copy of Spark may not have been compiled with YARN support.")
+            "This copy of Spark may not have been compiled with YARN support.")
       }
     }
 
@@ -268,6 +274,7 @@ private[spark] class SparkSubmit extends Logging {
     }
 
     // Fail fast, the following modes are not supported or applicable
+    // 检查我们的集群运行模式等是否正确
     (clusterManager, deployMode) match {
       case (STANDALONE, CLUSTER) if args.isPython =>
         error("Cluster deploy mode is currently not supported for python " +
@@ -292,6 +299,7 @@ private[spark] class SparkSubmit extends Logging {
       case (null, CLUSTER) => args.deployMode = "cluster"
       case _ =>
     }
+    // 判断是哪种模式
     val isYarnCluster = clusterManager == YARN && deployMode == CLUSTER
     val isMesosCluster = clusterManager == MESOS && deployMode == CLUSTER
     val isStandAloneCluster = clusterManager == STANDALONE && deployMode == CLUSTER
@@ -337,17 +345,18 @@ private[spark] class SparkSubmit extends Logging {
       }
     }
 
-    // update spark config from args
+    // update spark config from args  从配置中更新spark conf
     args.toSparkConf(Option(sparkConf))
-    val hadoopConf = conf.getOrElse(SparkHadoopUtil.newConfiguration(sparkConf))
+    val hadoopConf = conf.getOrElse(SparkHadoopUtil.newConfiguration(sparkConf))  // hadoop配置
+    // 在给定的父目录中创建一个临时目录。该目录将为自动删除时，VM关闭。
     val targetDir = Utils.createTempDir()
 
     // Kerberos is not supported in standalone mode, and keytab support is not yet available
     // in Mesos cluster mode.
     if (clusterManager != STANDALONE
-        && !isMesosCluster
-        && args.principal != null
-        && args.keytab != null) {
+      && !isMesosCluster
+      && args.principal != null
+      && args.keytab != null) {
       // If client mode, make sure the keytab is just a local path.
       if (deployMode == CLIENT && Utils.isLocalUri(args.keytab)) {
         args.keytab = new URI(args.keytab).getPath()
@@ -359,15 +368,15 @@ private[spark] class SparkSubmit extends Logging {
       }
     }
 
-    // Resolve glob path for different resources.
+    // Resolve glob path for different resources.  解析不同资源的全局访问路径。
     args.jars = Option(args.jars).map(resolveGlobPaths(_, hadoopConf)).orNull
     args.files = Option(args.files).map(resolveGlobPaths(_, hadoopConf)).orNull
     args.pyFiles = Option(args.pyFiles).map(resolveGlobPaths(_, hadoopConf)).orNull
     args.archives = Option(args.archives).map(resolveGlobPaths(_, hadoopConf)).orNull
 
-    lazy val secMgr = new SecurityManager(sparkConf)
+    lazy val secMgr = new SecurityManager(sparkConf)   // 安全管理
 
-    // In client mode, download remote files.
+    // In client mode, download remote files.  在客户端模式下，下载远程文件。
     var localPrimaryResource: String = null
     var localJars: String = null
     var localPyFiles: String = null
@@ -405,7 +414,9 @@ private[spark] class SparkSubmit extends Logging {
 
       def shouldDownload(scheme: String): Boolean = {
         forceDownloadSchemes.contains("*") || forceDownloadSchemes.contains(scheme) ||
-          Try { FileSystem.getFileSystemClass(scheme, hadoopConf) }.isFailure
+          Try {
+            FileSystem.getFileSystemClass(scheme, hadoopConf)
+          }.isFailure
       }
 
       def downloadResource(resource: String): String = {
@@ -423,7 +434,9 @@ private[spark] class SparkSubmit extends Logging {
         }
       }
 
-      args.primaryResource = Option(args.primaryResource).map { downloadResource }.orNull
+      args.primaryResource = Option(args.primaryResource).map {
+        downloadResource
+      }.orNull
       args.files = Option(args.files).map { files =>
         Utils.stringToSeq(files).map(downloadResource).mkString(",")
       }.orNull
@@ -454,7 +467,7 @@ private[spark] class SparkSubmit extends Logging {
         case e: Throwable =>
           error(
             s"Failed to get main class in JAR with error '${e.getMessage}'. " +
-            " Please specify one with --class."
+              " Please specify one with --class."
           )
       }
 
@@ -630,7 +643,9 @@ private[spark] class SparkSubmit extends Logging {
       if (localPrimaryResource != null && isUserJar(localPrimaryResource)) {
         childClasspath += localPrimaryResource
       }
-      if (localJars != null) { childClasspath ++= localJars.split(",") }
+      if (localJars != null) {
+        childClasspath ++= localJars.split(",")
+      }
     }
     // Add the main application jar and any added jars to classpath in case YARN client
     // requires these jars.
@@ -641,19 +656,25 @@ private[spark] class SparkSubmit extends Logging {
       if (isUserJar(args.primaryResource)) {
         childClasspath += args.primaryResource
       }
-      if (args.jars != null) { childClasspath ++= args.jars.split(",") }
+      if (args.jars != null) {
+        childClasspath ++= args.jars.split(",")
+      }
     }
 
     if (deployMode == CLIENT) {
-      if (args.childArgs != null) { childArgs ++= args.childArgs }
+      if (args.childArgs != null) {
+        childArgs ++= args.childArgs
+      }
     }
 
     // Map all arguments to command-line options or system properties for our chosen mode
     for (opt <- options) {
       if (opt.value != null &&
-          (deployMode & opt.deployMode) != 0 &&
-          (clusterManager & opt.clusterManager) != 0) {
-        if (opt.clOption != null) { childArgs += (opt.clOption, opt.value) }
+        (deployMode & opt.deployMode) != 0 &&
+        (clusterManager & opt.clusterManager) != 0) {
+        if (opt.clOption != null) {
+          childArgs += (opt.clOption, opt.value)
+        }
         if (opt.confKey != null) {
           if (opt.mergeFn.isDefined && sparkConf.contains(opt.confKey)) {
             sparkConf.set(opt.confKey, opt.mergeFn.get.apply(sparkConf.get(opt.confKey), opt.value))
@@ -689,7 +710,9 @@ private[spark] class SparkSubmit extends Logging {
       } else {
         // In legacy standalone cluster mode, use Client as a wrapper around the user class
         childMainClass = STANDALONE_CLUSTER_SUBMIT_CLASS
-        if (args.supervise) { childArgs += "--supervise" }
+        if (args.supervise) {
+          childArgs += "--supervise"
+        }
         Option(args.driverMemory).foreach { m => childArgs += ("--memory", m) }
         Option(args.driverCores).foreach { c => childArgs += ("--cores", c) }
         childArgs += "launch"
@@ -708,7 +731,7 @@ private[spark] class SparkSubmit extends Logging {
     }
 
     if ((clusterManager == MESOS || clusterManager == KUBERNETES)
-       && UserGroupInformation.isSecurityEnabled) {
+      && UserGroupInformation.isSecurityEnabled) {
       setRMPrincipal(sparkConf)
     }
 
@@ -874,8 +897,8 @@ private[spark] class SparkSubmit extends Logging {
    * running cluster deploy mode or python applications.
    */
   private def runMain(args: SparkSubmitArguments, uninitLog: Boolean): Unit = {
-    val (childArgs, childClasspath, sparkConf, childMainClass) = prepareSubmitEnvironment(args)
-    // Let the main class re-initialize the logging system once it starts.
+    val (childArgs, childClasspath, sparkConf, childMainClass) = prepareSubmitEnvironment(args) // 准备提交环境
+    // Let the main class re-initialize the logging system once it starts. 让主类在日志系统启动后重新初始化它。
     if (uninitLog) {
       Logging.uninitialize()
     }
@@ -981,8 +1004,9 @@ object SparkSubmit extends CommandLineUtils with Logging {
   private val CLASS_NOT_FOUND_EXIT_STATUS = 101
 
   // Following constants are visible for testing.
+  //   yarn模式的提交类
   private[deploy] val YARN_CLUSTER_SUBMIT_CLASS =
-    "org.apache.spark.deploy.yarn.YarnClusterApplication"
+  "org.apache.spark.deploy.yarn.YarnClusterApplication"
   private[deploy] val REST_CLUSTER_SUBMIT_CLASS = classOf[RestSubmissionClientApp].getName()
   private[deploy] val STANDALONE_CLUSTER_SUBMIT_CLASS = classOf[ClientApp].getName()
   private[deploy] val KUBERNETES_CLUSTER_SUBMIT_CLASS =
@@ -992,8 +1016,9 @@ object SparkSubmit extends CommandLineUtils with Logging {
     val submit = new SparkSubmit() {
       self =>
 
-      override protected def parseArguments(args: Array[String]): SparkSubmitArguments = {
+      override protected def parseArguments(args: Array[String]): SparkSubmitArguments = { // 参数解析
         new SparkSubmitArguments(args) {
+          // 初始化各个级别的日志打印信息
           override protected def logInfo(msg: => String): Unit = self.logInfo(msg)
 
           override protected def logWarning(msg: => String): Unit = self.logWarning(msg)
@@ -1010,6 +1035,7 @@ object SparkSubmit extends CommandLineUtils with Logging {
 
       override def doSubmit(args: Array[String]): Unit = {
         try {
+          // 提交应用
           super.doSubmit(args)
         } catch {
           case e: SparkUserAppException =>
@@ -1087,9 +1113,10 @@ private[spark] object SparkSubmitUtils {
 
   /**
    * Represents a Maven Coordinate
-   * @param groupId the groupId of the coordinate
+   *
+   * @param groupId    the groupId of the coordinate
    * @param artifactId the artifactId of the coordinate
-   * @param version the version of the coordinate
+   * @param version    the version of the coordinate
    */
   private[deploy] case class MavenCoordinate(groupId: String, artifactId: String, version: String) {
     override def toString: String = s"$groupId:$artifactId:$version"
@@ -1098,6 +1125,7 @@ private[spark] object SparkSubmitUtils {
   /**
    * Extracts maven coordinates from a comma-delimited string. Coordinates should be provided
    * in the format `groupId:artifactId:version` or `groupId/artifactId:version`.
+   *
    * @param coordinates Comma-delimited string of maven coordinates
    * @return Sequence of Maven coordinates
    */
@@ -1128,6 +1156,7 @@ private[spark] object SparkSubmitUtils {
 
   /**
    * Extracts maven coordinates from a comma-delimited string
+   *
    * @param defaultIvyUserDir The default user path for Ivy
    * @return A ChainResolver used by Ivy to search for and resolve dependencies.
    */
@@ -1175,13 +1204,14 @@ private[spark] object SparkSubmitUtils {
   /**
    * Output a comma-delimited list of paths for the downloaded jars to be added to the classpath
    * (will append to jars in SparkSubmit).
-   * @param artifacts Sequence of dependencies that were resolved and retrieved
+   *
+   * @param artifacts      Sequence of dependencies that were resolved and retrieved
    * @param cacheDirectory directory where jars are cached
    * @return a comma-delimited list of paths for the dependencies
    */
   def resolveDependencyPaths(
-      artifacts: Array[AnyRef],
-      cacheDirectory: File): String = {
+                              artifacts: Array[AnyRef],
+                              cacheDirectory: File): String = {
     artifacts.map { artifactInfo =>
       val artifact = artifactInfo.asInstanceOf[Artifact].getModuleRevisionId
       cacheDirectory.getAbsolutePath + File.separator +
@@ -1191,9 +1221,9 @@ private[spark] object SparkSubmitUtils {
 
   /** Adds the given maven coordinates to Ivy's module descriptor. */
   def addDependenciesToIvy(
-      md: DefaultModuleDescriptor,
-      artifacts: Seq[MavenCoordinate],
-      ivyConfName: String): Unit = {
+                            md: DefaultModuleDescriptor,
+                            artifacts: Seq[MavenCoordinate],
+                            ivyConfName: String): Unit = {
     artifacts.foreach { mvn =>
       val ri = ModuleRevisionId.newInstance(mvn.groupId, mvn.artifactId, mvn.version)
       val dd = new DefaultDependencyDescriptor(ri, false, false)
@@ -1207,9 +1237,9 @@ private[spark] object SparkSubmitUtils {
 
   /** Add exclusion rules for dependencies already included in the spark-assembly */
   def addExclusionRules(
-      ivySettings: IvySettings,
-      ivyConfName: String,
-      md: DefaultModuleDescriptor): Unit = {
+                         ivySettings: IvySettings,
+                         ivyConfName: String,
+                         md: DefaultModuleDescriptor): Unit = {
     // Add scala exclusion rule
     md.addExcludeRule(createExclusion("*:scala-library:*", ivySettings, ivyConfName))
 
@@ -1221,8 +1251,9 @@ private[spark] object SparkSubmitUtils {
 
   /**
    * Build Ivy Settings using options with default resolvers
+   *
    * @param remoteRepos Comma-delimited string of remote repositories other than maven central
-   * @param ivyPath The path to the local ivy repository
+   * @param ivyPath     The path to the local ivy repository
    * @return An IvySettings object
    */
   def buildIvySettings(remoteRepos: Option[String], ivyPath: Option[String]): IvySettings = {
@@ -1241,15 +1272,16 @@ private[spark] object SparkSubmitUtils {
 
   /**
    * Load Ivy settings from a given filename, using supplied resolvers
+   *
    * @param settingsFile Path to Ivy settings file
-   * @param remoteRepos Comma-delimited string of remote repositories other than maven central
-   * @param ivyPath The path to the local ivy repository
+   * @param remoteRepos  Comma-delimited string of remote repositories other than maven central
+   * @param ivyPath      The path to the local ivy repository
    * @return An IvySettings object
    */
   def loadIvySettings(
-      settingsFile: String,
-      remoteRepos: Option[String],
-      ivyPath: Option[String]): IvySettings = {
+                       settingsFile: String,
+                       remoteRepos: Option[String],
+                       ivyPath: Option[String]): IvySettings = {
     val file = new File(settingsFile)
     require(file.exists(), s"Ivy settings file $file does not exist")
     require(file.isFile(), s"Ivy settings file $file is not a normal file")
@@ -1257,7 +1289,7 @@ private[spark] object SparkSubmitUtils {
     try {
       ivySettings.load(file)
     } catch {
-      case e @ (_: IOException | _: ParseException) =>
+      case e@(_: IOException | _: ParseException) =>
         throw new SparkException(s"Failed when loading Ivy settings from $settingsFile", e)
     }
     processIvyPathArg(ivySettings, ivyPath)
@@ -1317,9 +1349,9 @@ private[spark] object SparkSubmitUtils {
    * each resolution to prevent accumulation of these files in the ivy cache dir.
    */
   private def clearIvyResolutionFiles(
-      mdId: ModuleRevisionId,
-      ivySettings: IvySettings,
-      ivyConfName: String): Unit = {
+                                       mdId: ModuleRevisionId,
+                                       ivySettings: IvySettings,
+                                       ivyConfName: String): Unit = {
     val currentResolutionFiles = Seq(
       s"${mdId.getOrganisation}-${mdId.getName}-$ivyConfName.xml",
       s"resolved-${mdId.getOrganisation}-${mdId.getName}-${mdId.getRevision}.xml",
@@ -1332,17 +1364,18 @@ private[spark] object SparkSubmitUtils {
 
   /**
    * Resolves any dependencies that were supplied through maven coordinates
+   *
    * @param coordinates Comma-delimited string of maven coordinates
    * @param ivySettings An IvySettings containing resolvers to use
-   * @param exclusions Exclusions to apply when resolving transitive dependencies
+   * @param exclusions  Exclusions to apply when resolving transitive dependencies
    * @return The comma-delimited path to the jars of the given maven artifacts including their
    *         transitive dependencies
    */
   def resolveMavenCoordinates(
-      coordinates: String,
-      ivySettings: IvySettings,
-      exclusions: Seq[String] = Nil,
-      isTest: Boolean = false): String = {
+                               coordinates: String,
+                               ivySettings: IvySettings,
+                               exclusions: Seq[String] = Nil,
+                               isTest: Boolean = false): String = {
     if (coordinates == null || coordinates.trim.isEmpty) {
       ""
     } else {
@@ -1410,9 +1443,9 @@ private[spark] object SparkSubmitUtils {
   }
 
   private[deploy] def createExclusion(
-      coords: String,
-      ivySettings: IvySettings,
-      ivyConfName: String): ExcludeRule = {
+                                       coords: String,
+                                       ivySettings: IvySettings,
+                                       ivyConfName: String): ExcludeRule = {
     val c = extractMavenCoordinates(coords)(0)
     val id = new ArtifactId(new ModuleId(c.groupId, c.artifactId), "*", "*", "*")
     val rule = new DefaultExcludeRule(id, ivySettings.getMatcher("glob"), null)
@@ -1451,12 +1484,12 @@ private[spark] object SparkSubmitUtils {
  * the user's driver program or to downstream launcher tools.
  */
 private case class OptionAssigner(
-    value: String,
-    clusterManager: Int,
-    deployMode: Int,
-    clOption: String = null,
-    confKey: String = null,
-    mergeFn: Option[(String, String) => String] = None)
+                                   value: String,
+                                   clusterManager: Int,
+                                   deployMode: Int,
+                                   clOption: String = null,
+                                   confKey: String = null,
+                                   mergeFn: Option[(String, String) => String] = None)
 
 private[spark] trait SparkSubmitOperation {
 

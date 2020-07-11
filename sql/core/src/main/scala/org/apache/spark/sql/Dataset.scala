@@ -257,7 +257,7 @@ class Dataset[T] private[sql](
   // sqlContext must be val because a stable identifier is expected when you import implicits
   @transient lazy val sqlContext: SQLContext = sparkSession.sqlContext
 
-  private[sql] def resolve(colName: String): NamedExpression = {
+  private[sql] def spark.shuffle.spresolve(colName: String): NamedExpression = {
     val resolver = sparkSession.sessionState.analyzer.resolver
     queryExecution.analyzed.resolveQuoted(colName, resolver)
       .getOrElse {
