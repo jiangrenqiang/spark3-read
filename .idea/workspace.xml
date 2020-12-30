@@ -2,63 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="111bf4bc-dac1-4876-8059-f33069838413" name="Default Changelist" comment="初始化">
-      <change afterPath="$PROJECT_DIR$/阅读源码的步骤记录.doc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__cglib_cglib_nodep_2_1_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_java_dev_jna_jna_4_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_java_dev_jna_jna_platform_4_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_sourceforge_cssparser_cssparser_0_9_19.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_sourceforge_htmlunit_htmlunit_2_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_sourceforge_htmlunit_htmlunit_core_js_2_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_sourceforge_htmlunit_neko_htmlunit_2_21.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_client_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_continuation_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_http_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_io_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_jndi_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_plus_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_proxy_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_security_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_server_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_servlet_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_servlets_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_util_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_webapp_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_xml_9_4_18_v20190429.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_api_9_2_17_v20160517.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_client_9_2_17_v20160517.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_common_9_2_17_v20160517.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_api_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_chrome_driver_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_edge_driver_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_firefox_driver_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_htmlunit_driver_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_ie_driver_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_java_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_leg_rc_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_remote_driver_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_safari_driver_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_seleniumhq_selenium_selenium_support_2_52_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_w3c_css_sac_1_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webbitserver_webbit_0_4_14.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assembly/spark-assembly_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/assembly/spark-assembly_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/spark-core_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/core/spark-core_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/scala/org/apache/spark/deploy/SparkSubmit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/scala/org/apache/spark/deploy/SparkSubmit.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/spark-examples_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/examples/spark-examples_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/avro/spark-avro_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/external/avro/spark-avro_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/kafka-0-10-assembly/spark-streaming-kafka-0-10-assembly_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/external/kafka-0-10-assembly/spark-streaming-kafka-0-10-assembly_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/kafka-0-10-sql/spark-sql-kafka-0-10_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/external/kafka-0-10-sql/spark-sql-kafka-0-10_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/kafka-0-10-token-provider/spark-token-provider-kafka-0-10_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/external/kafka-0-10-token-provider/spark-token-provider-kafka-0-10_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/kafka-0-10/spark-streaming-kafka-0-10_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/external/kafka-0-10/spark-streaming-kafka-0-10_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphx/spark-graphx_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/graphx/spark-graphx_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mllib/spark-mllib_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/mllib/spark-mllib_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repl/spark-repl_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/repl/spark-repl_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/catalyst/spark-catalyst_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sql/catalyst/spark-catalyst_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/core/spark-sql_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sql/core/spark-sql_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/core/src/main/scala/org/apache/spark/sql/Dataset.scala" beforeDir="false" afterPath="$PROJECT_DIR$/sql/core/src/main/scala/org/apache/spark/sql/Dataset.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/hive/spark-hive_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sql/hive/spark-hive_2.12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming/spark-streaming_2.12.iml" beforeDir="false" afterPath="$PROJECT_DIR$/streaming/spark-streaming_2.12.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,8 +87,24 @@
       <workItem from="1593739302175" duration="104000" />
       <workItem from="1593739443620" duration="5941000" />
       <workItem from="1593998458435" duration="57000" />
-      <workItem from="1593998547038" duration="12151000" />
+      <workItem from="1593998547038" duration="21530000" />
+      <workItem from="1594862202484" duration="6414000" />
+      <workItem from="1596417536742" duration="1197000" />
+      <workItem from="1596694892912" duration="596000" />
+      <workItem from="1597022655339" duration="2997000" />
+      <workItem from="1597281216642" duration="1798000" />
+      <workItem from="1603274478481" duration="7290000" />
+      <workItem from="1603951086294" duration="607000" />
+      <workItem from="1603957751033" duration="1741000" />
     </task>
+    <task id="LOCAL-00001" summary="提交注释">
+      <created>1594473131750</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1594473131750</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,32 +112,17 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="初始化" />
-    <option name="LAST_COMMIT_MESSAGE" value="初始化" />
+    <MESSAGE value="提交注释" />
+    <option name="LAST_COMMIT_MESSAGE" value="提交注释" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="340" y="112" key="CommitChangelistDialog2" timestamp="1591841206769">
+    <state x="734" y="386" key="NewModule_or_Project.wizard" timestamp="1609308745225">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="340" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1591841206769" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1592983089084">
+    <state x="734" y="386" key="NewModule_or_Project.wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1609308745225" />
+    <state x="636" y="253" width="760" height="534" key="find.popup" timestamp="1604028654490">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1592983089084" />
-    <state x="734" y="386" key="NewModule_or_Project.wizard" timestamp="1592303853542">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="734" y="386" key="NewModule_or_Project.wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1592303853542" />
-    <state x="640" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1591838851075">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="640" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1591838851075" />
-    <state x="636" y="253" width="760" height="534" key="find.popup" timestamp="1594288565325">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="636" y="253" width="760" height="534" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1594288565325" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1592562360748">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1592562360748" />
+    <state x="636" y="253" width="760" height="534" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604028654490" />
   </component>
 </project>
